@@ -54,9 +54,9 @@ class ColdChainPredictor:
 
         # 3. Calcula o Time-to-Violation (TTV) baseado na variação e no intervalo de temperaturado produto.
         ttv = float('inf')
-        if taxa_por_minuto > 0:
+        if taxa_por_minuto > 1e-5:
             ttv = (self.t_max - temp_atual) / taxa_por_minuto
-        elif taxa_por_minuto <= 0:
+        elif taxa_por_minuto < -1e-5:
             ttv = (self.t_min - temp_atual) / taxa_por_minuto
 
         violacao_prevista = ttv <= self.horizon
