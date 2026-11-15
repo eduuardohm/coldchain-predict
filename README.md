@@ -7,6 +7,7 @@ Cargas termolábeis, como vacinas, insulina, produtos biológicos e carnes para 
 
 # Estrutura do projeto
 
+```
 coldchain-predict/
 │
 ├── boot.py                 # Configurações iniciais de boot (desativar debug, etc.)
@@ -18,3 +19,4 @@ coldchain-predict/
     ├── predictor.py        # Classe da janela deslizante + Regressão Linear
     ├── storage.py          # Logger local (salva CSV ou JSON na memória Flash do ESP32)
     └── modem_4g.py         # Controle do módulo 4G via comandos AT (UART) e envio do payload
+```
