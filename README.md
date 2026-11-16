@@ -14,9 +14,27 @@ coldchain-predict/
 ├── main.py                 # Orquestrador: Máquina de estados e loop principal
 ├── config.py               # Constantes: pinos (GPIO), limites de temp (min/max), tamanho da janela
 │
-└── core/
-    ├── sensors.py          # Fachada que inicializa e lê todos os sensores de forma limpa
-    ├── predictor.py        # Classe da janela deslizante + Regressão Linear
-    ├── storage.py          # Logger local (salva CSV ou JSON na memória Flash do ESP32)
-    └── modem_4g.py         # Controle do módulo 4G via comandos AT (UART) e envio do payload
+├── core/
+│   ├── sensors.py          # Fachada que inicializa e lê todos os sensores de forma limpa
+│   ├── predictor.py        # Classe da janela deslizante + Regressão Linear
+│   ├── impact.py           # Detecção de impacto, queda e tombamento (acelerômetro MPU-6050)
+│   ├── storage.py          # Logger local (salva CSV ou JSON na memória Flash do ESP32)
+│   └── modem_4g.py         # Controle do módulo 4G via comandos AT (UART) e envio do payload
+│
+├── docs/
+│   └── deteccao_impacto.md # Critérios de impacto/queda e justificativa (OMS/PQS)
+│
+└── tests/
+    ├── synthetic_sensor.py # Simulação da predição de temperatura (roda no PC)
+    └── synthetic_impact.py # Simulação de queda, batida e tombamento (roda no PC)
+```
+
+# Detecção de impacto
+
+O módulo [`core/impact.py`](core/impact.py) detecta **quedas**, **impactos** e **tombamento** com o MPU-6050. A severidade das quedas vem da altura estimada pelo tempo de queda livre, comparada com os ensaios de qualificação da OMS para caixas de vacina (WHO/PQS/E004: quedas de 1 m, 22 repetições). Critérios, fontes e limitações estão em [`docs/deteccao_impacto.md`](docs/deteccao_impacto.md).
+
+> **Os valores padrão são só uma referência:** parte vem da OMS (válidos para caixas PQS E004) e da literatura, o resto foi definido pelo grupo. Todos devem ser calibrados com a caixa real.
+
+```
+py tests/synthetic_impact.py
 ```
