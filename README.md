@@ -14,6 +14,11 @@ coldchain-predict/
 ├── main.py                 # Orquestrador: Máquina de estados e loop principal
 ├── config.py               # Constantes: pinos (GPIO), limites de temp (min/max), tamanho da janela
 │
+├── lib/                    # Drivers de hardware (MicroPython)
+│   ├── ds18b20.py          # Temperatura da carga (1-Wire)
+│   ├── ds3231.py           # RTC (I2C 0x68)
+│   └── mpu6050.py          # Acelerômetro/giroscópio (I2C 0x69)
+│
 ├── core/
 │   ├── sensors.py          # Fachada que inicializa e lê todos os sensores de forma limpa
 │   ├── predictor.py        # Classe da janela deslizante + Regressão Linear
@@ -25,9 +30,22 @@ coldchain-predict/
 │   └── deteccao_impacto.md # Critérios de impacto/queda e justificativa (OMS/PQS)
 │
 └── tests/
+    ├── hardware_sensors.py # Teste de bancada dos sensores (roda no ESP32)
     ├── synthetic_sensor.py # Simulação da predição de temperatura (roda no PC)
     └── synthetic_impact.py # Simulação de queda, batida e tombamento (roda no PC)
 ```
+
+# Pinagem (ESP32-C3)
+
+| Sensor | Pino / barramento |
+|---|---|
+| DS18B20 | GPIO 2 (1-Wire, pull-up 4,7 kΩ) |
+| DHT22 | GPIO 4 |
+| I2C 0 (compartilhado) | SDA = GPIO 5, SCL = GPIO 6, 400 kHz |
+| DS3231 | I2C, 0x68 |
+| MPU-6050 | I2C, 0x69 (AD0 em nível alto) |
+
+Tudo definido em [`config.py`](config.py).
 
 # Detecção de impacto
 
